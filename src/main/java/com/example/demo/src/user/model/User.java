@@ -2,6 +2,7 @@ package com.example.demo.src.user.model;
 
 import lombok.*;
 
+@Builder
 @Getter // 해당 클래스에 대한 접근자 생성
 @Setter // 해당 클래스에 대한 설정자 생성
 @AllArgsConstructor // 해당 클래스의 모든 멤버 변수(userIdx, nickname, email, password)를 받는 생성자를 생성
@@ -11,8 +12,10 @@ import lombok.*;
  * User 클래스는 스프링에서 사용하는 Objec이다.(내부에서 사용하기 위한 객체라고 보면 된다.)
  */
 public class User {
-    private int userIdx;
-    private String email;
-    private String password;
-    private String nickname;
+    private String user_id;
+    private String user_pw;
+    private float longitude;
+    private float latitude;
+
+    private String nickname; // 필요 x
 }

@@ -44,31 +44,17 @@ public class UserProvider {
         User user = userDao.getPwd(postLoginReq);
         String password;
         try {
-            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getPassword()); // 암호화
-            // 회원가입할 때 비밀번호가 암호화되어 저장되었기 떄문에 로그인을 할때도 암호화된 값끼리 비교를 해야합니다.
+            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getUser_pw()); // 복호화 (회원가입할 때 비밀번호가 암호화되어 저장되었기 떄문에 로그인을 할때도 암호화된 값끼리 비교)
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if (postLoginReq.getPassword().equals(password)) { //비말번호가 일치한다면 userIdx를 가져온다.
-            int userIdx = userDao.getPwd(postLoginReq).getUserIdx();
-            return new PostLoginRes(userIdx);
-//  *********** 해당 부분은 7주차 - JWT 수업 후 주석해제 및 대체해주세요!  **************** //
-//            String jwt = jwtService.createJwt(userIdx);
-//            return new PostLoginRes(userIdx,jwt);
-//  **************************************************************************
-
-        } else { // 비밀번호가 다르다면 에러메세지를 출력한다.
+        if (postLoginReq.getUser_pw().equals(password)) { //비말번호가 일치하는지 확인
+            String user_id = userDao.getPwd(postLoginReq).getUser_id();
+            String jwt = jwtService.createJwt(user_id);
+            return new PostLoginRes(user_id,jwt);
+        } else {
             throw new BaseException(FAILED_TO_LOGIN);
-        }
-    }
-
-    // 해당 이메일이 이미 User Table에 존재하는지 확인
-    public int checkEmail(String email) throws BaseException {
-        try {
-            return userDao.checkEmail(email);
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
         }
     }
 
