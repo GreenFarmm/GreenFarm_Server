@@ -22,13 +22,12 @@ public class UserDao {
 
     // 회원가입
     public void createUser(PostUserReq postUserReq) {
-        String createUserQuery = "insert into User (user_id, user_pw, location, longitude, latitude) VALUES (?,?,?,?,?)";
+        String createUserQuery = "insert into User (user_id, user_pw, location) VALUES (?,?,?)";
         Object[] createUserParams = new Object[]{
                 postUserReq.getUser_id(),
                 postUserReq.getUser_pw(),
-                postUserReq.getLocation(),
-                postUserReq.getLongitude(),
-                postUserReq.getLatitude()};
+                postUserReq.getLocation()
+        };
         this.jdbcTemplate.update(createUserQuery, createUserParams);
     }
 

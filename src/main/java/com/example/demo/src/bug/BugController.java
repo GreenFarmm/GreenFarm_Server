@@ -68,13 +68,12 @@ public class BugController {
     }
 
 
-    private GetBugInfoRes getXmlData() throws ParserConfigurationException, IOException, SAXException {
-        GetBugInfoRes getBugInfoRes = new GetBugInfoRes();
+    void getXmlData(GetBugInfoRes getBugInfoRes, String sickCode) throws ParserConfigurationException, IOException, SAXException {
 
         String Url = "http://ncpms.rda.go.kr/npmsAPI/service?" +
                 "apiKey=2022b5d55c3ea9fac00003b87fa2ed6e69f3" +
                 "&serviceCode=SVC05" +
-                "&sickKey=D00001596"; // 팥 - 흰가루병
+                sickCode;
 
         // 1. 빌더 팩토리 생성.
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -104,15 +103,26 @@ public class BugController {
                 if(nodeName.equals("infectionRoute")) getBugInfoRes.setInfectionRoute(textContent);
             }
         }
-
-        return getBugInfoRes;
     }
 
     @ResponseBody
     @GetMapping("/search")
-    public BaseResponse<GetBugInfoRes> getBugInfo() throws BaseException, ParserConfigurationException, IOException, SAXException {
+    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestBody GetBugInfoReq getBugInfoReq) throws ParserConfigurationException, IOException, SAXException {
 
-        GetBugInfoRes getBugInfoRes = getXmlData();
+        /*
+        * sickCode (병해충 코드)
+        * < 팥 >
+        * 1. 흰가루병 (powdery mildew) : &sickKey=D00001596
+        *
+        *
+        *
+        * */
+
+        GetBugInfoRes getBugInfoRes = new GetBugInfoRes();
+        
+        if(getBugInfoReq.getSickName().equals("powdery mildew"))  getXmlData(getBugInfoRes, "&sickKey=D00001596");
+
+        // db에 바로 저장 or 저장하기 버튼 누르면 저장(이 경우에는 post api 하나 더 만들어야 함)
 
         return new BaseResponse<>(getBugInfoRes);
     }
