@@ -67,13 +67,13 @@ public class BugController {
         return result + "</xmp>";
     }
 
-
-    void getXmlData(GetBugInfoRes getBugInfoRes, String sickCode) throws ParserConfigurationException, IOException, SAXException {
+    void getXmlData(GetBugInfoRes getBugInfoRes, String sickKey) throws ParserConfigurationException, IOException, SAXException {
 
         String Url = "http://ncpms.rda.go.kr/npmsAPI/service?" +
                 "apiKey=2022b5d55c3ea9fac00003b87fa2ed6e69f3" +
                 "&serviceCode=SVC05" +
-                sickCode;
+                "&sickKey=" +
+                sickKey;
 
         // 1. 빌더 팩토리 생성.
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -105,24 +105,42 @@ public class BugController {
         }
     }
 
+    /**
+     * 병해충 정보 조회 및 db 저장
+     * @param getBugInfoReq
+     * @return
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
     @ResponseBody
     @GetMapping("/search")
-    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestBody GetBugInfoReq getBugInfoReq) throws ParserConfigurationException, IOException, SAXException {
+    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestParam String user_id, @RequestBody GetBugInfoReq getBugInfoReq) throws ParserConfigurationException, IOException, SAXException, BaseException {
 
         /*
         * sickCode (병해충 코드)
         * < 팥 >
-        * 1. 흰가루병 (powdery mildew) : &sickKey=D00001596
-        *
-        *
-        *
+        * 1. 흰가루병 (powdery mildew) : D00001596
+        * 2. 세균잎마름병 (Bacterial leaf blight) : 지원 x
+        * 3. Rhizopus :
+        * < 참깨 >
+        * 1. 세균성점무늬병 (Bacterial leaf spo) : D00002210
+        * 2. 흰가루병 (Powdery mildew) : D00002218
+        * < 콩 >
+        * 1. 노균병 (Downy mildew) : D00001463
+        * 2. 불마름병 (Bacterial pustule) : 지원 x
         * */
 
-        GetBugInfoRes getBugInfoRes = new GetBugInfoRes();
-        
-        if(getBugInfoReq.getSickName().equals("powdery mildew"))  getXmlData(getBugInfoRes, "&sickKey=D00001596");
+        // jwt token 검증
+        jwtService.JwtEffectiveness(user_id, jwtService.getUserId());
 
-        // db에 바로 저장 or 저장하기 버튼 누르면 저장(이 경우에는 post api 하나 더 만들어야 함)
+        GetBugInfoRes getBugInfoRes = new GetBugInfoRes();
+
+        // 병해충 정보 조회
+        if(getBugInfoReq.getSickName().equals("powdery mildew"))  getXmlData(getBugInfoRes, "D00001596");
+
+        // db에 저장
+        bugService.saveBugInfo(user_id,getBugInfoRes);
 
         return new BaseResponse<>(getBugInfoRes);
     }

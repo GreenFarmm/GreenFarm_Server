@@ -24,11 +24,11 @@ public class JwtService {
     @param userIdx
     @return String
      */
-    public String createJwt(String user_id){
+    public String createJwt(String userId){
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam("type","jwt")
-                .claim("userIdx",user_id)
+                .claim("userId",userId)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365)))
                 .signWith(SignatureAlgorithm.HS256, Secret.JWT_SECRET_KEY)
@@ -45,29 +45,44 @@ public class JwtService {
     }
 
     /*
-    JWT에서 userIdx 추출
+    JWT에서 userId 추출
     @return int
     @throws BaseException
      */
-    public int getUserIdx() throws BaseException{
+    public String getUserId() throws BaseException {
+
         //1. JWT 추출
         String accessToken = getJwt();
-        if(accessToken == null || accessToken.length() == 0){
+        if (accessToken == null || accessToken.length() == 0) {
             throw new BaseException(EMPTY_JWT);
         }
 
         // 2. JWT parsing
         Jws<Claims> claims;
-        try{
+        try {
             claims = Jwts.parser()
                     .setSigningKey(Secret.JWT_SECRET_KEY)
-                    .parseClaimsJws(accessToken);
+                    .parseClaimsJws(accessToken); // 파싱 및 검증, 실패 시 에러
         } catch (Exception ignored) {
-            throw new BaseException(INVALID_JWT);
+            return "만료";
         }
 
-        // 3. userIdx 추출
-        return claims.getBody().get("userIdx",Integer.class);  // jwt 에서 userIdx를 추출합니다.
+        // 3. userId 추출
+        return claims.getBody().get("userId", String.class);  // jwt 에서 userId를 추출
     }
 
+    /**
+     * 유저 JWT 유효성 검사
+     *
+     * @param userId
+     * @param userIdByJwt
+     * @return BaseResponse
+     */
+    public void JwtEffectiveness(String userId, String userIdByJwt) throws BaseException {
+        if (userIdByJwt.equals("만료")) {
+            throw new BaseException(EXPIRATION_ACCESS_JWT);
+        } else if (!userId.equals(userIdByJwt)) {
+            throw new BaseException(INVALID_USER_JWT);
+        }
+    }
 }
