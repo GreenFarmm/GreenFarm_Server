@@ -1,6 +1,7 @@
 package com.example.demo.src.bug;
 
 import com.example.demo.src.bug.model.GetBugInfoRes;
+import com.example.demo.src.user.model.GetUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -34,4 +35,17 @@ public class BugDao {
         this.jdbcTemplate.update(saveBugInfoQuery, saveBugInfoParam);
     }
 
+    public GetBugInfoRes getBugInfo(String sickNameEng) {
+        String getBugInfoQuery = "select * from Bug where sickNameEng = ?";
+        return this.jdbcTemplate.queryForObject(getBugInfoQuery,
+                (rs, rowNum) -> new GetBugInfoRes(
+                        rs.getString("cropName"),
+                        rs.getString("sickNameKor"),
+                        rs.getString("sickNameEng"),
+                        rs.getString("developmentCondition"),
+                        rs.getString("preventionMethod"),
+                        rs.getString("symptoms"),
+                        rs.getString("infectionRoute")),
+                sickNameEng);
+    }
 }

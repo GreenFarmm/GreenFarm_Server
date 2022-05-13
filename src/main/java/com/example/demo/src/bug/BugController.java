@@ -141,8 +141,9 @@ public class BugController {
         // 1. 흰가루병 (powdery mildew)
         if(getBugInfoReq.getSickName().equals("Powdery mildew1"))  getXmlData(getBugInfoRes, "D00001596");
         // 2. 세균잎마름병 (Bacterial leaf blight)
-
+        if(getBugInfoReq.getSickName().equals("Bacterial leaf blight")) getBugInfoRes = bugProvider.getBugInfo(getBugInfoReq.getSickName());
         // 3. 리조푸스 (Rhizopus)
+        if(getBugInfoReq.getSickName().equals("Rhizopus")) getBugInfoRes = bugProvider.getBugInfo(getBugInfoReq.getSickName());
 
         // < 참깨 >
         // 1. 세균성점무늬병 (Bacterial leaf spo)
@@ -154,7 +155,7 @@ public class BugController {
         // 1. 노균병 (Downy mildew)
         if(getBugInfoReq.getSickName().equals("Downy mildew"))  getXmlData(getBugInfoRes, "D00001463");
         // 2. 불마름병 (Bacterial pustule)
-
+        if(getBugInfoReq.getSickName().equals("Bacterial pustule")) getBugInfoRes = bugProvider.getBugInfo(getBugInfoReq.getSickName());
 
         // db에 저장
         bugService.saveBugInfo(user_id,getBugInfoRes);
