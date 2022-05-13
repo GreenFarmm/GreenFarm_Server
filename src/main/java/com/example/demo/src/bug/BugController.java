@@ -114,21 +114,21 @@ public class BugController {
      * @throws SAXException
      */
     @ResponseBody
-    @GetMapping("/search")
+    @PostMapping("/search")
     public BaseResponse<GetBugInfoRes> getBugInfo(@RequestParam String user_id, @RequestBody GetBugInfoReq getBugInfoReq) throws ParserConfigurationException, IOException, SAXException, BaseException {
 
         /*
         * sickCode (병해충 코드)
         * < 팥 >
-        * 1. 흰가루병 (powdery mildew) : D00001596
-        * 2. 세균잎마름병 (Bacterial leaf blight) : 지원 x
-        * 3. Rhizopus :
+        * 1. 흰가루병 (Powdery mildew) : D00001596
+        * 2. 세균잎마름병 (Bacterial leaf blight) : open Api 지원 x
+        * 3. 리조푸스 (Rhizopus) : open Api 지원 x
         * < 참깨 >
         * 1. 세균성점무늬병 (Bacterial leaf spo) : D00002210
         * 2. 흰가루병 (Powdery mildew) : D00002218
         * < 콩 >
         * 1. 노균병 (Downy mildew) : D00001463
-        * 2. 불마름병 (Bacterial pustule) : 지원 x
+        * 2. 불마름병 (Bacterial pustule) : open Api 지원 x
         * */
 
         // jwt token 검증
@@ -137,7 +137,24 @@ public class BugController {
         GetBugInfoRes getBugInfoRes = new GetBugInfoRes();
 
         // 병해충 정보 조회
-        if(getBugInfoReq.getSickName().equals("powdery mildew"))  getXmlData(getBugInfoRes, "D00001596");
+        // <팥>
+        // 1. 흰가루병 (powdery mildew)
+        if(getBugInfoReq.getSickName().equals("Powdery mildew1"))  getXmlData(getBugInfoRes, "D00001596");
+        // 2. 세균잎마름병 (Bacterial leaf blight)
+
+        // 3. 리조푸스 (Rhizopus)
+
+        // < 참깨 >
+        // 1. 세균성점무늬병 (Bacterial leaf spo)
+        if(getBugInfoReq.getSickName().equals("Bacterial leaf spo"))  getXmlData(getBugInfoRes, "D00002210");
+        // 2. 흰가루병 (Powdery mildew)
+        if(getBugInfoReq.getSickName().equals("Powdery mildew2"))  getXmlData(getBugInfoRes, "D00002210");
+
+        // < 콩 >
+        // 1. 노균병 (Downy mildew)
+        if(getBugInfoReq.getSickName().equals("Downy mildew"))  getXmlData(getBugInfoRes, "D00001463");
+        // 2. 불마름병 (Bacterial pustule)
+
 
         // db에 저장
         bugService.saveBugInfo(user_id,getBugInfoRes);
