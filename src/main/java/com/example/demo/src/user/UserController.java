@@ -1,5 +1,6 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.bug.model.GetBugInfoRes;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -127,6 +128,21 @@ public class UserController {
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
+    }
+
+    /**
+     * 병해충 검색 기록 조회
+     * @param user_id
+     * @return
+     * @throws BaseException
+     */
+    @GetMapping("/history")
+    public BaseResponse<List<GetHistoryRes>> getHistory(@RequestParam String user_id) throws BaseException {
+        jwtService.JwtEffectiveness(user_id, jwtService.getUserId());
+
+        List<GetHistoryRes> getHistoryRes = userProvider.getHistory(user_id);
+
+        return new BaseResponse<>(getHistoryRes);
     }
 
 

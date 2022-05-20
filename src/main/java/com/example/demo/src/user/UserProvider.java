@@ -90,4 +90,9 @@ public class UserProvider {
         }
     }
 
+    public List<GetHistoryRes> getHistory(String user_id) throws BaseException {
+        List<GetHistoryRes> getHistoryRes = userDao.getHistory(user_id);
+
+        return getHistoryRes;
+    }
 }

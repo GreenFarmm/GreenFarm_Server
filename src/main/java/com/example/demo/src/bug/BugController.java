@@ -163,6 +163,5 @@ public class BugController {
         return new BaseResponse<>(getBugInfoRes);
     }
 
-
 }
 

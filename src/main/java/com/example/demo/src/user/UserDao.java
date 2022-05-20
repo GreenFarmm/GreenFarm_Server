@@ -91,4 +91,20 @@ public class UserDao {
                 getUserParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    public List<GetHistoryRes> getHistory(String user_id) {
+        String getHistoryQuery = "select * from Crop where user_id = ?";
+        String getHistoryParam = user_id;
+        return this.jdbcTemplate.query(getHistoryQuery,
+                (rs, rowNum) -> new GetHistoryRes(
+                        rs.getInt("crop_num"),
+                        rs.getString("cropName"),
+                        rs.getString("sickNameKor"),
+                        rs.getString("sickNameEng"),
+                        rs.getString("developmentCondition"),
+                        rs.getString("preventionMethod"),
+                        rs.getString("symptoms"),
+                        rs.getString("infectionRoute"),
+                        rs.getString("imgPath")),
+                getHistoryParam);
+    }
 }
