@@ -116,21 +116,6 @@ public class BugController {
     @ResponseBody
     @PostMapping("/search")
     public BaseResponse<GetBugInfoRes> getBugInfo(@RequestParam String user_id, @RequestBody GetBugInfoReq getBugInfoReq) throws ParserConfigurationException, IOException, SAXException, BaseException {
-
-        /*
-        * sickCode (병해충 코드)
-        * < 팥 >
-        * 1. 흰가루병 (Powdery mildew) : D00001596
-        * 2. 세균잎마름병 (Bacterial leaf blight) : open Api 지원 x
-        * 3. 리조푸스 (Rhizopus) : open Api 지원 x
-        * < 참깨 >
-        * 1. 세균성점무늬병 (Bacterial leaf spo) : D00002210
-        * 2. 흰가루병 (Powdery mildew) : D00002218
-        * < 콩 >
-        * 1. 노균병 (Downy mildew) : D00001463
-        * 2. 불마름병 (Bacterial pustule) : open Api 지원 x
-        * */
-
         // jwt token 검증
         jwtService.JwtEffectiveness(user_id, jwtService.getUserId());
 

@@ -23,11 +23,13 @@ public class UserDao {
 
     // 회원가입
     public void createUser(PostUserReq postUserReq) {
-        String createUserQuery = "insert into User (user_id, user_pw, location) VALUES (?,?,?)";
+        String createUserQuery = "insert into User (user_id, user_pw, location, longitude, latitude) VALUES (?,?,?,?,?)";
         Object[] createUserParams = new Object[]{
                 postUserReq.getUser_id(),
                 postUserReq.getUser_pw(),
-                postUserReq.getLocation()
+                postUserReq.getLocation(),
+                postUserReq.getLongitude(),
+                postUserReq.getLatitude()
         };
         this.jdbcTemplate.update(createUserQuery, createUserParams);
     }
@@ -37,7 +39,7 @@ public class UserDao {
         String modifyUserNameQuery = "update User set nickname = ? where userIdx = ? "; // 해당 userIdx를 만족하는 User를 해당 nickname으로 변경한다.
         Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserIdx()}; // 주입될 값들(nickname, userIdx) 순
 
-        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0) 
+        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
 
