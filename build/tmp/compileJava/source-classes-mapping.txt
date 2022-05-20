@@ -4,8 +4,8 @@ com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
 com/example/demo/config/Constant.java
  com.example.demo.config.Constant
-com/example/demo/src/bug/BugService.java
- com.example.demo.src.bug.BugService
+com/example/demo/src/s3/HelloController.java
+ com.example.demo.src.s3.HelloController
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
 com/example/demo/src/user/model/PostLoginRes.java
@@ -24,20 +24,22 @@ com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
 com/example/demo/src/user/model/PostLoginReq.java
  com.example.demo.src.user.model.PostLoginReq
-com/example/demo/src/bug/BugProvider.java
- com.example.demo.src.bug.BugProvider
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
-com/example/demo/src/bug/BugDao.java
- com.example.demo.src.bug.BugDao
-com/example/demo/src/bug/BugController.java
- com.example.demo.src.bug.model.BugController
-com/example/demo/src/user/UserProvider.java
- com.example.demo.src.user.UserProvider
+com/example/demo/config/AmazonS3Config.java
+ com.example.demo.config.AmazonS3Config
+com/example/demo/src/s3/S3uploader.java
+ com.example.demo.src.s3.S3uploader
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController
 com/example/demo/src/bug/model/GetBugInfoRes.java
  com.example.demo.src.bug.model.GetBugInfoRes
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
+com/example/demo/src/user/UserProvider.java
+ com.example.demo.src.user.UserProvider
 com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
  com.example.demo.src.user.model.User$UserBuilder
@@ -49,7 +51,11 @@ com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
 com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
+com/example/demo/src/bug/BugProvider.java
+ com.example.demo.src.bug.BugProvider
+com/example/demo/src/bug/BugService.java
+ com.example.demo.src.bug.BugService
+com/example/demo/src/bug/BugDao.java
+ com.example.demo.src.bug.BugDao
+com/example/demo/src/bug/BugController.java
+ com.example.demo.src.bug.model.BugController

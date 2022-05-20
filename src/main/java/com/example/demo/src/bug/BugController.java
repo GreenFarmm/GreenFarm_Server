@@ -4,11 +4,16 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.config.BaseException;
 import com.example.demo.src.bug.BugProvider;
 import com.example.demo.src.bug.BugService;
+import com.example.demo.src.s3.S3uploader;
 import com.example.demo.utils.JwtService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -33,10 +38,13 @@ public class BugController {
     @Autowired
     private final JwtService jwtService;
 
-    public BugController(BugProvider bugProvider, BugService bugService, JwtService jwtService) {
+    private final S3uploader s3uploader;
+
+    public BugController(BugProvider bugProvider, BugService bugService, JwtService jwtService, S3uploader s3uploader) {
         this.bugProvider = bugProvider;
         this.bugService = bugService;
         this.jwtService = jwtService;
+        this.s3uploader = s3uploader;
     }
 
 
@@ -115,35 +123,42 @@ public class BugController {
      */
     @ResponseBody
     @PostMapping("/search")
-    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestParam String user_id, @RequestBody GetBugInfoReq getBugInfoReq) throws ParserConfigurationException, IOException, SAXException, BaseException {
+    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestPart(value = "images", required = false) MultipartFile multipartFile, @RequestParam String user_id,  @RequestParam String sickName) throws ParserConfigurationException, IOException, SAXException, BaseException {
         // jwt token 검증
         jwtService.JwtEffectiveness(user_id, jwtService.getUserId());
 
         GetBugInfoRes getBugInfoRes = new GetBugInfoRes();
 
+        String imgPath = null;
+        if(multipartFile != null)
+        {
+            // s3에 업로드
+            imgPath = s3uploader.upload(multipartFile, "images");
+        }
+
         // 병해충 정보 조회
         // <팥>
         // 1. 흰가루병 (powdery mildew)
-        if(getBugInfoReq.getSickName().equals("Powdery mildew1"))  getXmlData(getBugInfoRes, "D00001596");
+        if(sickName.equals("Powdery mildew1"))  getXmlData(getBugInfoRes, "D00001596");
         // 2. 세균잎마름병 (Bacterial leaf blight)
-        if(getBugInfoReq.getSickName().equals("Bacterial leaf blight")) getBugInfoRes = bugProvider.getBugInfo(getBugInfoReq.getSickName());
+        if(sickName.equals("Bacterial leaf blight")) getBugInfoRes = bugProvider.getBugInfo(sickName);
         // 3. 리조푸스 (Rhizopus)
-        if(getBugInfoReq.getSickName().equals("Rhizopus")) getBugInfoRes = bugProvider.getBugInfo(getBugInfoReq.getSickName());
+        if(sickName.equals("Rhizopus")) getBugInfoRes = bugProvider.getBugInfo(sickName);
 
         // < 참깨 >
         // 1. 세균성점무늬병 (Bacterial leaf spo)
-        if(getBugInfoReq.getSickName().equals("Bacterial leaf spo"))  getXmlData(getBugInfoRes, "D00002210");
+        if(sickName.equals("Bacterial leaf spo"))  getXmlData(getBugInfoRes, "D00002210");
         // 2. 흰가루병 (Powdery mildew)
-        if(getBugInfoReq.getSickName().equals("Powdery mildew2"))  getXmlData(getBugInfoRes, "D00002210");
+        if(sickName.equals("Powdery mildew2"))  getXmlData(getBugInfoRes, "D00002210");
 
         // < 콩 >
         // 1. 노균병 (Downy mildew)
-        if(getBugInfoReq.getSickName().equals("Downy mildew"))  getXmlData(getBugInfoRes, "D00001463");
+        if(sickName.equals("Downy mildew"))  getXmlData(getBugInfoRes, "D00001463");
         // 2. 불마름병 (Bacterial pustule)
-        if(getBugInfoReq.getSickName().equals("Bacterial pustule")) getBugInfoRes = bugProvider.getBugInfo(getBugInfoReq.getSickName());
+        if(sickName.equals("Bacterial pustule")) getBugInfoRes = bugProvider.getBugInfo(sickName);
 
         // db에 저장
-        bugService.saveBugInfo(user_id,getBugInfoRes);
+        bugService.saveBugInfo(user_id,getBugInfoRes, imgPath);
 
         return new BaseResponse<>(getBugInfoRes);
     }

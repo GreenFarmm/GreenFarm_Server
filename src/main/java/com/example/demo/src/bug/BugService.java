@@ -27,7 +27,7 @@ public class BugService {
         this.jwtService = jwtService;
     }
 
-    public void saveBugInfo(String user_id, GetBugInfoRes getBugInfoRes) throws BaseException {
-        bugDao.saveBugInfo(user_id, getBugInfoRes);
+    public void saveBugInfo(String user_id, GetBugInfoRes getBugInfoRes, String imgPath) throws BaseException {
+        bugDao.saveBugInfo(user_id, getBugInfoRes, imgPath);
     }
 }

@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: demo
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
 
   datasource:
     platform: mysql
@@ -12,3 +17,15 @@ spring:
     username: greenfarm # 만약 따로 설정하지 않으셨다면 기본값은 admin 입니다
     password: greenfarm1! # 비밀번호를 입력해주세요!
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAVMOTRZOKH5C7CQUD
+      secretKey: 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
+    s3:
+      bucket: greenfarm-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

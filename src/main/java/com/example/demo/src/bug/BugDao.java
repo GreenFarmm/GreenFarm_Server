@@ -20,8 +20,8 @@ public class BugDao {
     }
 
     // 병해충 정보 저장
-    public void saveBugInfo(String user_id, GetBugInfoRes getBugInfoRes) {
-        String saveBugInfoQuery = "insert into Crop (user_id, cropName, sickNameKor, sickNameEng, developmentCondition, preventionMethod, symptoms, infectionRoute) VALUES (?,?,?,?,?,?,?,?)";
+    public void saveBugInfo(String user_id, GetBugInfoRes getBugInfoRes, String imgPath) {
+        String saveBugInfoQuery = "insert into Crop (user_id, cropName, sickNameKor, sickNameEng, developmentCondition, preventionMethod, symptoms, infectionRoute, imgPath) VALUES (?,?,?,?,?,?,?,?,?)";
         Object[] saveBugInfoParam = new Object[]{
                 user_id,
                 getBugInfoRes.getCropName(),
@@ -30,7 +30,8 @@ public class BugDao {
                 getBugInfoRes.getDevelopmentCondition(),
                 getBugInfoRes.getPreventionMethod(),
                 getBugInfoRes.getSymptoms(),
-                getBugInfoRes.getInfectionRoute()
+                getBugInfoRes.getInfectionRoute(),
+                imgPath
         };
         this.jdbcTemplate.update(saveBugInfoQuery, saveBugInfoParam);
     }
