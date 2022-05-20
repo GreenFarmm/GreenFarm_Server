@@ -12,8 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class GetUserRes {
-    private int userIdx;
-    private String nickname;
-    private String email;
-    private String password;
+    private String user_id;
+    private String user_pw;
+    private String location;
+    private float longitude;
+    private float latitude;
 }

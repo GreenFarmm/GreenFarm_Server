@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import static com.example.demo.config.BaseResponseStatus.*;
 
@@ -58,7 +60,6 @@ public class UserProvider {
         }
     }
 
-
     // User들의 정보를 조회
     public List<GetUserRes> getUsers() throws BaseException {
         try {
@@ -69,30 +70,36 @@ public class UserProvider {
         }
     }
 
-    // 해당 nickname을 갖는 User들의 정보 조회
-    public List<GetUserRes> getUsersByNickname(String nickname) throws BaseException {
-        try {
-            List<GetUserRes> getUsersRes = userDao.getUsersByNickname(nickname);
-            return getUsersRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-
-    // 해당 userIdx를 갖는 User의 정보 조회
-    public GetUserRes getUser(int userIdx) throws BaseException {
-        try {
-            GetUserRes getUserRes = userDao.getUser(userIdx);
-            return getUserRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
+    /**
+     * 병해충 검색 기록 조회
+     * @param user_id
+     * @return
+     * @throws BaseException
+     */
     public List<GetHistoryRes> getHistory(String user_id) throws BaseException {
         List<GetHistoryRes> getHistoryRes = userDao.getHistory(user_id);
 
         return getHistoryRes;
+    }
+
+    /**
+     * 가까운 농민 조회
+     * @param user_id
+     * @return
+     * @throws BaseException
+     */
+    public List<String> getNearByUser(String user_id) throws BaseException {
+        List<String> users = new ArrayList<String>();
+
+        List<GetUserRes> getUserRes = userDao.getUsers();
+        Float longitude = userDao.getlongitude(user_id);
+        Float latitude = userDao.getlatitude(user_id);
+
+        for(int i=0;i<getUserRes.size();i++){
+            if(getUserRes.get(i).getUser_id().equals(user_id)) continue;
+            if(getUserRes.get(i).getLongitude() >= longitude-0.5 && getUserRes.get(i).getLongitude() <= longitude+0.5) users.add(getUserRes.get(i).getUser_id());
+        }
+
+        return users;
     }
 }
