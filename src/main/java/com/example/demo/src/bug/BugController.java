@@ -149,7 +149,10 @@ public class BugController {
         // 1. 세균성점무늬병 (Bacterial leaf spo)
         if(sickName.equals("Bacterial leaf spo"))  getXmlData(getBugInfoRes, "D00002210");
         // 2. 흰가루병 (Powdery mildew)
-        if(sickName.equals("Powdery mildew2"))  getXmlData(getBugInfoRes, "D00002210");
+        if(sickName.equals("Powdery mildew2")) {
+            getXmlData(getBugInfoRes, "D00001596");
+            getBugInfoRes.setCropName("참깨");
+        }
 
         // < 콩 >
         // 1. 노균병 (Downy mildew)
