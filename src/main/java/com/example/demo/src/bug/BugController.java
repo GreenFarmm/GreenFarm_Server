@@ -102,6 +102,11 @@ public class BugController {
                 String nodeName = childNodes.item(j).getNodeName();
                 String textContent = childNodes.item(j).getTextContent();
 
+                textContent = textContent.replaceAll("<br>","");
+                textContent = textContent.replaceAll("<br/>","");
+                textContent = textContent.replaceAll("\\r\\n","");
+                textContent = textContent.replaceAll("\\n","");
+
                 if(nodeName.equals("cropName")) getBugInfoRes.setCropName(textContent);
                 if(nodeName.equals("sickNameKor")) getBugInfoRes.setSickNameKor(textContent);
                 if(nodeName.equals("sickNameEng")) getBugInfoRes.setSickNameEng(textContent);
