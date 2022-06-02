@@ -17,4 +17,5 @@ public class GetHistoryRes {
     private String symptoms;
     private String infectionRoute;
     private String imgPath;
+    private Long search_time;
 }

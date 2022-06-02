@@ -128,7 +128,7 @@ public class BugController {
      */
     @ResponseBody
     @PostMapping("/search")
-    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestPart(value = "images", required = false) MultipartFile multipartFile, @RequestParam String user_id,  @RequestParam String sickName) throws ParserConfigurationException, IOException, SAXException, BaseException {
+    public BaseResponse<GetBugInfoRes> getBugInfo(@RequestPart(value = "images", required = false) MultipartFile multipartFile, @RequestParam String user_id,  @RequestParam String sickName, @RequestParam Long search_time) throws ParserConfigurationException, IOException, SAXException, BaseException {
         // jwt token 검증
         jwtService.JwtEffectiveness(user_id, jwtService.getUserId());
 
@@ -166,7 +166,7 @@ public class BugController {
         if(sickName.equals("Bacterial pustule")) getBugInfoRes = bugProvider.getBugInfo(sickName);
 
         // db에 저장
-        bugService.saveBugInfo(user_id,getBugInfoRes, imgPath);
+        bugService.saveBugInfo(user_id,getBugInfoRes, imgPath, search_time);
 
         return new BaseResponse<>(getBugInfoRes);
     }

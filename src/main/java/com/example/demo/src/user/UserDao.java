@@ -79,7 +79,8 @@ public class UserDao {
                         rs.getString("preventionMethod"),
                         rs.getString("symptoms"),
                         rs.getString("infectionRoute"),
-                        rs.getString("imgPath")),
+                        rs.getString("imgPath"),
+                        rs.getLong("search_time")),
                 getHistoryParam);
     }
 
